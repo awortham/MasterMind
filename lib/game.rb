@@ -1,6 +1,13 @@
 require_relative 'prints'
 require_relative 'cli'
 
+# guideline:
+#   * Dependencies point downwards
+#     (in this case, CLI commands Game, but Game doesn't get to command CLI)
+#   * Avoid side effects
+#     (e.g. if guess is correct, then return true, but don't kick off new game)
+#     (e.g. make a new game instead of resetting current game)
+
 class Game
   attr_reader   :letters, :color, :cli
   attr_accessor :count_guesses, :random
@@ -18,27 +25,21 @@ class Game
     end
   end
 
-  # guess(value)
   def guess(guess)
     color = colors_check(guess)
     position = check_position(guess)
     @count_guesses += 1
     interpret(position, guess)
-    if win_game?(position) == true
-      you_won
-    else
-      cli.subsequent_guess
-    end
+    win_game?(position)
   end
 
-  def you_won
-    puts Prints.congrats(count_guesses, random)
+  def you_won(duration_string)
+    puts Prints.congrats(count_guesses, random, duration_string)
     @count_guesses = 0
     answer = gets.chomp
     case answer
     when "p"
       @random = randomize_letters
-      randomize
       cli.initial_play
     when "q"
       exit

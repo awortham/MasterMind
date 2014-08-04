@@ -17,8 +17,8 @@ module Prints
     You've taken #{count_guesses} guesses"
   end
 
-  def congrats(count_guesses, user_guess)
-    "Congratulations! You guessed the sequence '#{user_guess}' in #{count_guesses} guesses over time.
+  def congrats(count_guesses, user_guess, duration_string)
+    "Congratulations! You guessed the sequence '#{user_guess}' in #{count_guesses} guesses over #{duration_string}.
     Do you want to (p)lay again or (q)uit?"
   end
 
