@@ -1,69 +1,68 @@
-require_relative 'prints'  # => true, false
-require_relative 'cli'     # => false, true
+require_relative 'prints'
+require_relative 'cli'
+
+# guideline:
+#   * Dependencies point downwards
+#     (in this case, CLI commands Game, but Game doesn't get to command CLI)
+#   * Avoid side effects
+#     (e.g. if guess is correct, then return true, but don't kick off new game)
+#     (e.g. make a new game instead of resetting current game)
 
 class Game
-  attr_reader   :letters, :position, :color, :guess, :cli  # => nil, nil
-  attr_accessor :count_guesses, :random                    # => nil, nil
+  attr_reader   :letters, :color, :cli
+  attr_accessor :count_guesses, :random
   def initialize(cli)
-    @letters = ["b", "r", "y", "g"]                        # => ["b", "r", "y", "g"], ["b", "r", "y", "g"]
-    @random  = []                                          # => [], []
-    @count_guesses = 0                                     # => 0, 0
-    @position = position                                   # => nil, nil
-    @color = color                                         # => nil, nil
-    @guess = guess                                         # => nil, nil
-    @cli = cli                                             # => nil, nil
+    @letters = ["b", "r", "y", "g"]
+    @random  = randomize_letters
+    @count_guesses = 0
+    @color = color
+    @cli = cli
   end
 
-  def randomize
-    4.times do
-      random = letters.sample
-      @random << random
+  def randomize_letters
+    4.times.map do
+      letters.sample
     end
   end
 
-  def guess_logic(guess)
-    @guess = guess
-
+  def guess(guess)
     color = colors_check(guess)
     position = check_position(guess)
     @count_guesses += 1
-    interprete
-    if win_game? == true
-      you_won
-    else
-      cli.subsequent_guess
-    end
+    interpret(position, guess)
+    win_game?(position)
   end
 
-  def you_won
-    puts Prints.congrats(count_guesses, random)
+  def you_won(duration_string)
+    puts Prints.congrats(count_guesses, random, duration_string)
     @count_guesses = 0
     answer = gets.chomp
     case answer
     when "p"
-      @random = []
-      randomize
+      @random = randomize_letters
       cli.initial_play
     when "q"
       exit
     end
   end
 
-  def interprete
-    puts Prints.guess(@count_guesses, color, position, @guess)
+  def interpret(position, guess)
+    puts Prints.guess(@count_guesses, color, position, guess)
   end
 
   def check_position(guess)
-    @position = random.zip(guess).map { |num| num
-    }.map { |x| x.uniq.count == 1 }.count(true)
+    random.zip(guess)
+        .map { |num| num }
+        .map { |x| x.uniq.count == 1 }
+        .count(true)
   end
 
   def colors_check(guess)
     @color = guess.find_all { |color| random.include?(color) }.uniq.count
   end
 
-  def win_game?
-    @position == 4
+  def win_game?(position)
+    position == 4
   end
 end
 

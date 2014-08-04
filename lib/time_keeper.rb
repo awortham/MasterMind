@@ -1,22 +1,15 @@
 class TimeKeeper
-  attr_reader :first, :second
-
-  def initialize
-    @first = first
-    @second = second
+  def start
+    @start_time = Time.now.to_i
   end
 
-  def start_time
-    @first = Time.now.to_i
+  def finish
+    @end_time = Time.now.to_i
   end
 
-  def end_time
-    @second = Time.now.to_i
-  end
-
-  def duration(first, second)
-    seconds = ((first - second) % 60)
-    minutes = (first - second) / 60
+  def duration
+    seconds = ((@end_time - @start_time) % 60)
+    minutes = (@end_time - @start_time) / 60
     "#{minutes} minutes, #{seconds} seconds"
   end
 end

@@ -4,11 +4,11 @@ require_relative 'prints'
 
 class CommandLineInterface
   include Prints
-  attr_reader :game
+  attr_reader :game, :time_keeper
 
   def initialize
     @game = Game.new(self)
-    @timekeeper = TimeKeeper.new
+    @time_keeper = TimeKeeper.new
   end
 
   def start
@@ -30,18 +30,26 @@ class CommandLineInterface
   end
 
   def initial_play
+    time_keeper.start
     puts Prints.sequence
-    intake = gets.chomp
-    guess = intake.split('')
-    @game.randomize
-    @game.guess_logic(guess)
+    take_guess
   end
 
   def subsequent_guess
     puts "Make another guess?"
-    intake = gets.chomp
-    guess = intake.split('')
-    @game.guess_logic(guess)
+    take_guess
+  end
+
+  def take_guess
+    intake   = gets.chomp
+    guess    = intake.split('')
+    user_won = @game.guess(guess)
+    if user_won
+      time_keeper.finish
+      @game.you_won(time_keeper.duration)
+    else
+      subsequent_guess
+    end
   end
 end
 
