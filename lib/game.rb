@@ -20,7 +20,7 @@ class Game
   end
 
   # guess(value)
-  def guess_logic(guess)
+  def guess(guess)
     color = colors_check(guess)
     position = check_position(guess)
     @count_guesses += 1

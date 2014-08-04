@@ -34,14 +34,14 @@ class CommandLineInterface
     intake = gets.chomp
     guess = intake.split('')
     @game.randomize
-    @game.guess_logic(guess)
+    @game.guess(guess)
   end
 
   def subsequent_guess
     puts "Make another guess?"
     intake = gets.chomp
     guess = intake.split('')
-    @game.guess_logic(guess)
+    @game.guess(guess)
   end
 end
 
