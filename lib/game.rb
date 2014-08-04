@@ -1,17 +1,15 @@
-require_relative 'prints'  # => true, false
-require_relative 'cli'     # => false, true
+require_relative 'prints'
+require_relative 'cli'
 
 class Game
-  attr_reader   :letters, :position, :color, :guess, :cli  # => nil, nil
-  attr_accessor :count_guesses, :random                    # => nil, nil
+  attr_reader   :letters, :color, :cli
+  attr_accessor :count_guesses, :random
   def initialize(cli)
-    @letters = ["b", "r", "y", "g"]                        # => ["b", "r", "y", "g"], ["b", "r", "y", "g"]
-    @random  = []                                          # => [], []
-    @count_guesses = 0                                     # => 0, 0
-    @position = position                                   # => nil, nil
-    @color = color                                         # => nil, nil
-    @guess = guess                                         # => nil, nil
-    @cli = cli                                             # => nil, nil
+    @letters = ["b", "r", "y", "g"]
+    @random  = []
+    @count_guesses = 0
+    @color = color
+    @cli = cli
   end
 
   def randomize
@@ -21,14 +19,13 @@ class Game
     end
   end
 
+  # guess(value)
   def guess_logic(guess)
-    @guess = guess
-
     color = colors_check(guess)
     position = check_position(guess)
     @count_guesses += 1
-    interprete
-    if win_game? == true
+    interpret(position, guess)
+    if win_game?(position) == true
       you_won
     else
       cli.subsequent_guess
@@ -49,21 +46,23 @@ class Game
     end
   end
 
-  def interprete
-    puts Prints.guess(@count_guesses, color, position, @guess)
+  def interpret(position, guess)
+    puts Prints.guess(@count_guesses, color, position, guess)
   end
 
   def check_position(guess)
-    @position = random.zip(guess).map { |num| num
-    }.map { |x| x.uniq.count == 1 }.count(true)
+    random.zip(guess)
+        .map { |num| num }
+        .map { |x| x.uniq.count == 1 }
+        .count(true)
   end
 
   def colors_check(guess)
     @color = guess.find_all { |color| random.include?(color) }.uniq.count
   end
 
-  def win_game?
-    @position == 4
+  def win_game?(position)
+    position == 4
   end
 end
 
