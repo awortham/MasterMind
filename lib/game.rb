@@ -6,16 +6,15 @@ class Game
   attr_accessor :count_guesses, :random
   def initialize(cli)
     @letters = ["b", "r", "y", "g"]
-    @random  = []
+    @random  = randomize_letters
     @count_guesses = 0
     @color = color
     @cli = cli
   end
 
-  def randomize
-    4.times do
-      random = letters.sample
-      @random << random
+  def randomize_letters
+    4.times.map do
+      letters.sample
     end
   end
 
@@ -38,7 +37,7 @@ class Game
     answer = gets.chomp
     case answer
     when "p"
-      @random = []
+      @random = randomize_letters
       randomize
       cli.initial_play
     when "q"

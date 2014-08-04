@@ -33,7 +33,6 @@ class CommandLineInterface
     puts Prints.sequence
     intake = gets.chomp
     guess = intake.split('')
-    @game.randomize
     @game.guess(guess)
   end
 
