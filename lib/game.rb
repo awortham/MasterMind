@@ -1,5 +1,5 @@
+require_relative 'cli'     # => false, true
 require_relative 'prints'
-require_relative 'cli'
 
 # guideline:
 #   * Dependencies point downwards
@@ -9,13 +9,15 @@ require_relative 'cli'
 #     (e.g. make a new game instead of resetting current game)
 
 class Game
-  attr_reader   :letters, :color, :cli
+
+  include Prints
+
+  attr_reader   :letters, :cli
   attr_accessor :count_guesses, :random
   def initialize(cli)
     @letters = ["b", "r", "y", "g"]
     @random  = randomize_letters
     @count_guesses = 0
-    @color = color
     @cli = cli
   end
 
@@ -36,7 +38,7 @@ class Game
   def you_won(duration_string)
     puts Prints.congrats(count_guesses, random, duration_string)
     @count_guesses = 0
-    answer = gets.chomp
+    answer = gets.downcase.chomp
     case answer
     when "p"
       @random = randomize_letters
@@ -47,6 +49,7 @@ class Game
   end
 
   def interpret(position, guess)
+    color = colors_check(guess)
     puts Prints.guess(@count_guesses, color, position, guess)
   end
 
@@ -58,7 +61,15 @@ class Game
   end
 
   def colors_check(guess)
-    @color = guess.find_all { |color| random.include?(color) }.uniq.count
+
+    doubles = random.zip(guess) .select do |nested|
+      nested[0] != nested[1]
+    end
+    a, b = doubles.transpose
+    a.map do |same|
+    b.join.include?(same)
+
+    end.count(true)
   end
 
   def win_game?(position)
@@ -69,8 +80,7 @@ end
 
 
 
-#game = Game.new  # => #<Game:0x007f9aae0585e8 @letters=["b", "r", "y", "g"], @random=[], @count_guesses=0, @position=nil, @color=nil, @guess=nil>, #<Game:0x007f9aae052b70 @letters=["b", "r", "y", "g"], @random=[], ...
-# game.randomize                          # => 4, 4
-# game.random                             # => ["y", "r", "b", "g"], ["b", "g", "g", "r"]
-# game.check_position(["g","g","g","g"])  # => 1, 2
-# game.colors_check(["g","g","g","g"])    # => 1, 1
+# game = Game.new
+# game.random
+# game.check_position(["g","g","g","g"])
+# game.colors_check(["g","r","r","y"])

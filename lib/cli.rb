@@ -4,29 +4,49 @@ require_relative 'prints'
 
 class CommandLineInterface
   include Prints
-  attr_reader :game, :time_keeper
+  attr_reader :game, :time_keeper, :command
 
   def initialize
     @game = Game.new(self)
     @time_keeper = TimeKeeper.new
+    @command = ""
   end
 
   def start
     puts Prints.welcome
-    choice = gets.chomp
-    determine_game(choice)
+    @command = get_input
+    process_initial_commands
   end
 
-  def determine_game(choice)
-    case choice
-    when "p"
-      initial_play
-    when "i"
-      puts Prints.instructions
-      start
-    when "q"
-      exit
+  def get_input
+    gets.downcase.strip
+  end
+
+  def process_initial_commands
+    case
+    when play?
+         initial_play
+    when instructions?
+        puts Prints.instructions
+        start
+    when finished?
+         exit
+    else
+         puts "Not a valid command"
+         start
     end
+  end
+
+  def play?
+    command == "p"
+  end
+
+  def instructions?
+    command == 'i'
+  end
+
+  def finished?
+    command == 'q' || command == 'quit'
   end
 
   def initial_play
@@ -41,8 +61,7 @@ class CommandLineInterface
   end
 
   def take_guess
-    intake   = gets.chomp
-    guess    = intake.split('')
+    guess    = get_input.split('')
     user_won = @game.guess(guess)
     if user_won
       time_keeper.finish
