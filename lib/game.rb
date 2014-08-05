@@ -1,4 +1,4 @@
-require_relative 'cli'     # => false, true
+#require_relative 'cli'     # => false, true
 require_relative 'prints'
 
 # guideline:
@@ -12,13 +12,14 @@ class Game
 
   include Prints
 
-  attr_reader   :letters, :cli
-  attr_accessor :count_guesses, :random
+  attr_reader   :letters, :cli, :random
+  attr_accessor :count_guesses
+
   def initialize(cli)
     @letters = ["b", "r", "y", "g"]
     @random  = randomize_letters
     @count_guesses = 0
-    @cli = cli
+    #@cli = cli
   end
 
   def randomize_letters
@@ -35,18 +36,18 @@ class Game
     win_game?(position)
   end
 
-  def you_won(duration_string)
-    puts Prints.congrats(count_guesses, random, duration_string)
-    @count_guesses = 0
-    answer = gets.downcase.chomp
-    case answer
-    when "p"
-      @random = randomize_letters
-      cli.initial_play
-    when "q"
-      exit
-    end
-  end
+  # def you_won(duration_string)
+  #   puts Prints.congrats(count_guesses, random, duration_string)
+  #   @count_guesses = 0
+  #   answer = gets.downcase.chomp
+  #   case answer
+  #   when "p"
+  #     @random = randomize_letters
+  #     cli.initial_play
+  #   when "q"
+  #     exit
+  #   end
+  # end
 
   def interpret(position, guess)
     color = colors_check(guess)
@@ -60,16 +61,20 @@ class Game
         .count(true)
   end
 
+  # def colors_check(guess)
+  #
+  #   doubles = random.zip(guess) .select do |nested|
+  #     nested[0] != nested[1]
+  #   end
+  #   a, b = doubles.transpose
+  #   a.map do |same|
+  #   b.join.include?(same)
+  #
+  #   end.count(true)
+  # end
+
   def colors_check(guess)
-
-    doubles = random.zip(guess) .select do |nested|
-      nested[0] != nested[1]
-    end
-    a, b = doubles.transpose
-    a.map do |same|
-    b.join.include?(same)
-
-    end.count(true)
+    @color = guess.find_all { |color| random.include?(color) }.uniq.count
   end
 
   def win_game?(position)

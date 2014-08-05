@@ -23,17 +23,17 @@ class CommandLineInterface
   end
 
   def process_initial_commands
+    unless finished?
     case
     when play?
-         initial_play
+        initial_play
     when instructions?
         puts Prints.instructions
         start
-    when finished?
-         exit
     else
-         puts "Not a valid command"
-         start
+      puts "Not a valid command"
+      start
+    end
     end
   end
 
@@ -61,19 +61,31 @@ class CommandLineInterface
   end
 
   def take_guess
-    guess    = get_input.split('')
+    @command    = get_input
+    if finished?
+      restart
+      return
+    end
+    guess = command.split('')
     user_won = @game.guess(guess)
     if user_won
       time_keeper.finish
-      @game.you_won(time_keeper.duration)
+      you_won(time_keeper.duration)
     else
       subsequent_guess
     end
   end
+
+  def restart
+    puts "Thank you for playing!"
+    start
+  end
+
+
+  def you_won(duration_string)
+    Prints.congrats(@game.count_guesses, @game.random, duration_string)
+    answer = get_input
+    @game.count_guesses = 0
+    process_initial_commands
+  end
 end
-
-
-#run colors_check(guess)
-#run position_check(guess)
-#raise the count_guesses by 1
-#capture the user's guess in a variable so that you can retrieve the information
