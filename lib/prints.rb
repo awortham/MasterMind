@@ -27,4 +27,32 @@ module Prints
       a clue as to how close your guess was. Make your next guess and repeat until
       you get a full match!\n\n"
   end
+
+  def enter_command
+    puts "Enter your command: "
+  end
+
+  def good_bye
+    puts "Good bye. Thanks for playing!\n\n"
+  end
+
+  def not_valid
+    puts "Not a valid command"
+  end
+
+  def thanks
+    puts "Thank you for playing!"
+  end
+
+  def wrong_number_of_letters
+    puts "Thats crap. input 4 letters. Guess again"
+  end
+
+  def more_guesses
+    puts "Make another guess?"
+  end
+
+  def good_guess
+    puts "Good guess"
+  end
 end

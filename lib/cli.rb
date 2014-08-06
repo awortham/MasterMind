@@ -1,11 +1,11 @@
-require_relative 'time_keeper'  # => true
-require_relative 'game'         # => true
-require_relative 'prints'       # => false
+require_relative 'time_keeper'
+require_relative 'game'
+require_relative 'prints'
 
 class CommandLineInterface
-  include Prints                             # => CommandLineInterface
-  attr_reader :game, :time_keeper, :command, :guess  # => nil
-
+  include Prints
+  attr_reader :game, :time_keeper, :command, :guess
+  #attr_accessor :guess
   def initialize
     @game        = Game.new(self)
     @time_keeper = TimeKeeper.new
@@ -14,16 +14,12 @@ class CommandLineInterface
   end
 
   def start
-    puts Prints.welcome
-    until finished?
-      print "Enter your command: "
+    until quit?(@command)
+      Prints.welcome
+      Prints.enter_command
       @command = get_input
       process_initial_commands
     end
-  end
-
-  def get_input
-    gets.downcase.strip
   end
 
   def process_initial_commands
@@ -31,26 +27,14 @@ class CommandLineInterface
     when play?
       initial_play
     when instructions?
-      puts Prints.instructions
+       Prints.instructions
       start
-    when finished?
-      puts "Good bye."
+    when quit?(@command)
+      Prints.good_bye
     else
-      puts "Not a valid command"
+      Prints.not_valid
       start
     end
-  end
-
-  def play?
-    command == "p"
-  end
-
-  def instructions?
-    command == 'i'
-  end
-
-  def finished?
-    command == 'q' || command == 'quit'
   end
 
   def initial_play
@@ -59,48 +43,26 @@ class CommandLineInterface
     take_guess
   end
 
-  def subsequent_guess
-    puts "Make another guess?"
-    take_guess
-  end
-
-  def invalid_guess?(command)
-    command.length != 4
-  end
-
- def validate_guess(guess)
-   if invalid_guess(guess) == true
-     take_guess
-   else
-     puts "Good guess"
-   end
- end
-
-
   def take_guess
-    puts "Game initialized."
-    until win? || quit?
-      print "Enter your guess: "
+    until win? || quit?(@guess)
+      Prints.enter_command
       @guess = get_input
       case
-      when quit?
-        puts "Thanks for playing."
-      when invalid_guess?(command)
-        puts "Thats crap. input 4 letters. Guess again"
+      when quit?(@guess)
+        Prints.good_bye
+      when invalid_guess?(@guess)
+        Prints.wrong_number_of_letters
       else
-        guess = command.split('')
+        guess = @guess.split('')
         @did_i_win = @game.guess(guess)
         determine_if_winner
       end
     end
   end
 
-  def quit?
-    guess == "q"
-  end
-
-  def win?
-    @did_i_win
+  def subsequent_guess
+    Prints.more_guesses
+    take_guess
   end
 
   def determine_if_winner
@@ -113,21 +75,53 @@ class CommandLineInterface
     end
   end
 
-  def restart
-    puts "Thank you for playing!"
-    start
-  end
-
-
   def you_won(duration_string)
     Prints.congrats(@game.count_guesses, @game.random, duration_string)
     answer = get_input
-    restart
+    if answer == 'q'
+    Prints.thanks
+    else
+    reset
+    end
   end
 
-  def restart
+  def reset
     @game.count_guesses = 0
-    @game = Game.new(self)
-    process_initial_commands
+    @game.randomize_letters
+    @did_i_win = false
+    @guess = ''
+    start
+  end
+
+  def get_input
+    gets.downcase.strip
+  end
+
+  def play?
+    command == "p"
+  end
+
+  def instructions?
+    command == 'i'
+  end
+
+  def quit?(guess)
+    guess == "q" || guess == 'quit'
+  end
+
+  def invalid_guess?(command)
+    command.length != 4
+  end
+
+  def validate_guess(guess)
+   if invalid_guess(guess) == true
+     take_guess
+   else
+     Prints.good_guess
+   end
+  end
+
+  def win?
+    @did_i_win
   end
 end
