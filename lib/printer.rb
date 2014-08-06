@@ -1,6 +1,4 @@
-module Prints
-  extend self
-
+class Printer
   def welcome
      puts "Welcome to MASTERMIND
     Would you like to (p)lay, read the (i)nstructions, or (q)uit?"

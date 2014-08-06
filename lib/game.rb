@@ -1,15 +1,16 @@
-require_relative 'prints'
-
 class Game
-
-  attr_reader   :letters, :cli, :random
+  attr_reader   :letters,
+                :cli,
+                :random,
+                :printer
   attr_accessor :count_guesses
 
   def initialize
-    @letters = ["b", "r", "y", "g"]
-    @random  = randomize_letters
+    @letters       = ["b", "r", "y", "g"]
+    @random        = randomize_letters
     @count_guesses = 0
-    @level = 0
+    @level         = 0
+    @printer       = Printer.new
   end
 
   def randomize_letters
@@ -28,7 +29,7 @@ class Game
 
   def interpret(position, guess)
     color = colors_check(guess)
-    Prints.guess(@count_guesses, color, position, guess)
+    printer.guess(@count_guesses, color, position, guess)
   end
 
   def check_position(guess)
