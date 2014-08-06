@@ -19,6 +19,7 @@ class Game
     @letters = ["b", "r", "y", "g"]
     @random  = randomize_letters
     @count_guesses = 0
+    @level = 0
     #@cli = cli
   end
 
