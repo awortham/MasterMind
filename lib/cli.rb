@@ -5,9 +5,9 @@ require_relative 'prints'
 class CommandLineInterface
   include Prints
   attr_reader :game, :time_keeper, :command, :guess
-  #attr_accessor :guess
+
   def initialize
-    @game        = Game.new(self)
+    @game        = Game.new
     @time_keeper = TimeKeeper.new
     @command     = ""
     @guess       = ""
