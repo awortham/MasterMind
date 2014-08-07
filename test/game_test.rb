@@ -1,6 +1,6 @@
 require_relative 'test_helper'
 
-class GameTest < Minitest::Test
+class GameTest < MiniTest::Test
 
   def test_it_generates_an_array_of_letters
     game = Game.new

@@ -1,20 +1,13 @@
 require_relative 'test_helper'
 require 'colorize'
 
-class PrinterTest < Minitest::Test
-
-
-  def test_out_puts_welcome_message
-    printer = Printer.new
-    assert_output("\e[0;94;49mWelcome to MASTERMIND
-    Would you like to (p)lay, read the (i)nstructions, or (q)uit?\e[0m\n") {printer.welcome}
-  end
+class PrinterTest < MiniTest::Test
 
   def test_outputs_sequence
     printer = Printer.new
-    assert_output ("I have generated a beginner sequence with four elements made up of: (r)ed,
+    assert_output ("\e[0;94;49mI have generated a beginner sequence with four elements made up of: (r)ed,
     (g)reen, (b)lue, and (y)ellow. Use (q)uit at any time to end the game.
-    What's your guess?\n") {printer.sequence}
+    What's your guess?\e[0m\n") {printer.sequence}
   end
 
   def test_outputs_instructions

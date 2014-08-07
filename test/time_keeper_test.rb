@@ -1,6 +1,6 @@
 require_relative 'test_helper'
 
-class TimeKeeperTest < Minitest::Test
+class TimeKeeperTest < MiniTest::Test
 
   def test_start_creates_a_timestamp
     time = TimeKeeper.new
