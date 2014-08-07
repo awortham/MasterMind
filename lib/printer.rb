@@ -1,24 +1,36 @@
 class Printer
 
   def welcome
-     puts "Welcome to MASTERMIND
+
+  puts "
+
+|   Y   .---.-.-----|  |_.-----.----|   Y   |__.-----.--|  |  |  |
+ |.      |  _  |__ --|   _|  -__|   _|.      |  |     |  _  |__|__|
+ |. \_/  |___._|_____|____|_____|__| |. \_/  |__|__|__|_____|__|__|
+ |:  |   |                           |:  |   |
+ |::.|:. |                           |::.|:. |
+ `--- ---'                           `--- ---'
+".colorize(:red)
+
+
+    puts "Welcome to MASTERMIND
     Would you like to (p)lay, read the (i)nstructions, or (q)uit?".colorize(:light_blue)
   end
 
   def sequence
      puts "I have generated a beginner sequence with four elements made up of: (r)ed,
     (g)reen, (b)lue, and (y)ellow. Use (q)uit at any time to end the game.
-    What's your guess?"
+    What's your guess?".colorize(:light_blue)
   end
 
   def guess(count_guesses, color, position, guess)
     puts "'#{guess}' has #{color} of the correct elements with #{position} in the correct positions
-    You've taken #{count_guesses} guesses"
+    You've taken #{count_guesses} guesses".colorize(:light_blue)
   end
 
   def congrats(count_guesses, user_guess, duration_string)
     puts "Congratulations! You guessed the sequence '#{user_guess}' in #{count_guesses} guesses over #{duration_string}.
-    Do you want to (p)lay again or (q)uit?"
+    Do you want to (p)lay again or (q)uit?".colorize(:red)
   end
 
   def instructions
