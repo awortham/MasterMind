@@ -40,8 +40,7 @@ class Game
   def colors_check(guess)
     @color = guess.find_all { |color| random.include?(color) }.uniq.count
   end
-# input number of correct positions
-#returns a true or false
+
   def win_game?(position)
     position == 4
   end

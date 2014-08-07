@@ -1,4 +1,5 @@
 class Printer
+
   def welcome
      puts "Welcome to MASTERMIND
     Would you like to (p)lay, read the (i)nstructions, or (q)uit?"
@@ -53,4 +54,10 @@ class Printer
   def good_guess
     puts "Good guess"
   end
+
+  private
+
+  # def puts(message)
+  #    ENVIRONMENT ? message : super
+  # end
 end

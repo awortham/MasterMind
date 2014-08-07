@@ -1,8 +1,7 @@
 require_relative 'test_helper'
-require_relative '../lib/game'
-require_relative '../lib/printer'
 
 class GameTest < Minitest::Test
+
   def test_it_generates_an_array_of_letters
     game = Game.new
     assert_equal ["b", "r", "y", "g"], game.letters
