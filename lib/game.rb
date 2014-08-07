@@ -31,6 +31,14 @@ class Game
   end
 
   def check_position(guess)
+    # matches = 0
+    # 
+    # random.each_with_index |color, index|
+    #   matches += 1 if color == guess[index]
+    # end
+    #
+    # matches
+
     random.zip(guess)
         .map { |num| num }
         .map { |x| x.uniq.count == 1 }
