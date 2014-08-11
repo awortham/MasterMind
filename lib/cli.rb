@@ -87,10 +87,10 @@ class CLI
   end
 
   def reset
-    @game.count_guesses = 0
-    game.randomize_letters
+    #@game.count_guesses = 0
+    @game = Game.new
     @did_i_win = false
-    @guess     = ''
+    @guess     = nil
     start
   end
 
